@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROCEED WITH CHAOS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;900&display=swap');
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black:   #0a0a0a;
+            --white:   #f0f0f0;
+            --pink:    #ff3471;
+            --yellow:  #ffc41b;
+            --dim:     #444;
+            --mid:     #888;
+        }
+
+        html, body {
+            min-height: 100%;
+            background: var(--black);
+            color: var(--white);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        body {
+            overflow-y: auto;
+        }
+
+        /* ─── BOOT SCREEN ──────────────────────────────── */
+        #boot {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(24px, 6vw, 80px);
+            z-index: 100;
+            background: var(--black);
+            transition: opacity 0.8s ease;
+        }
+
+        #boot.fade-out { opacity: 0; pointer-events: none; }
+
+        .boot-line {
+            font-size: clamp(11px, 1.4vw, 14px);
+            line-height: 1.9;
+            opacity: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: opacity 0.2s;
+        }
+
+        .boot-line.visible { opacity: 1; }
+        .boot-line.dim     { color: var(--dim); }
+        .boot-line.mid     { color: var(--mid); }
+        .boot-line.accent  { color: var(--pink); }
+        .boot-line.yellow  { color: var(--yellow); }
+        .boot-line.gap     { margin-bottom: 8px; }
+
+        /* progress bar */
+        .bar-wrap {
+            width: min(480px, 80vw);
+            height: 3px;
+            background: #1a1a1a;
+            margin: 20px 0 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .bar-wrap.visible { opacity: 1; }
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--pink);
+            transition: width 0.06s linear;
+        }
+        .bar-label {
+            font-size: 11px;
+            color: var(--mid);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .bar-label.visible { opacity: 1; }
+
+        /* cursor blink */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 13px;
+            background: var(--pink);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ─── MAIN CONTENT ───────────────────────────────── */
+        #main {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: clamp(16px, 4vw, 40px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease 0.2s;
+            overflow-y: auto;
+        }
+
+        #main.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .inner {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 34px;
+            padding-bottom: 60px;
+        }
+
+        /* ASCII title */
+        .ascii-title {
+            font-size: clamp(7.5px, 1.55vw, 13.5px);
+            line-height: 1.15;
+            white-space: pre;
+            color: var(--pink);
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0;
+            user-select: none;
+        }
+
+        /* ─── MANIFESTO SECTION ───────────────────────── */
+        .manifesto-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 30px 40px;
+            border: 1px solid rgba(255, 52, 113, 0.3);
+            background: rgba(255, 52, 113, 0.02);
+            line-height: 1.8;
+            font-size: clamp(13px, 1.4vw, 15px);
+        }
+
+        .manifesto-section p {
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .manifesto-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Opening quote */
+        .opening-quote {
+            font-size: clamp(14px, 1.6vw, 17px);
+            font-style: italic;
+            color: var(--pink);
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 3px solid var(--pink);
+            background: rgba(255, 52, 113, 0.05);
+        }
+
+        .quote-author {
+            display: block;
+            margin-top: 10px;
+            font-size: clamp(12px, 1.3vw, 14px);
+            color: var(--yellow);
+            font-weight: 600;
+        }
+
+        /* Yin yang line */
+        .poetic-line {
+            display: block;
+            margin: 15px 0;
+            padding-left: 20px;
+            color: var(--yellow);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        /* Rick Rubin quote */
+        .inline-quote {
+            font-style: italic;
+            color: var(--pink);
+            margin: 25px 0;
+            padding: 20px;
+            border-left: 3px solid var(--pink);
+            background: rgba(255, 52, 113, 0.05);
+            font-size: clamp(13px, 1.4vw, 15px);
+        }
+
+        /* Bullet points */
+        .paradox-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .paradox-list li {
+            padding: 8px 0 8px 20px;
+            position: relative;
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .paradox-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--pink);
+            font-weight: 700;
+        }
+
+        /* Emphasis */
+        .emphasis-truth {
+            color: var(--yellow);
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        /* warning box */
+        .warning-box {
+            width: 100%;
+            border: 1px solid var(--yellow);
+            padding: clamp(20px, 4vw, 34px) clamp(20px, 5vw, 42px);
+            text-align: center;
+            background: rgba(255,196,27,0.03);
+        }
+
+        .warning-header {
+            font-size: clamp(12px, 1.6vw, 16px);
+            font-weight: 900;
+            color: var(--yellow);
+            letter-spacing: 0.2em;
+            margin-bottom: 21px;
+            animation: blink-slow 2s step-end infinite;
+        }
+        @keyframes blink-slow { 55%,75% { opacity: 0.25; } }
+
+        .paradox-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .paradox-item {
+            font-size: clamp(11px, 1.5vw, 15px);
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.05em;
+        }
+
+        .paradox-arrow {
+            color: var(--pink);
+            font-size: clamp(11px, 1.5vw, 15px);
+        }
+
+        /* terms box */
+        .terms-box {
+            width: 100%;
+            border: 1px solid var(--dim);
+            padding: clamp(20px, 4vw, 34px) clamp(20px, 5vw, 42px);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .terms-label {
+            font-size: clamp(10px, 1.2vw, 12px);
+            color: var(--mid);
+            letter-spacing: 0.15em;
+            margin-bottom: 21px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 11px 13px;
+            cursor: pointer;
+            transition: background 0.15s;
+            margin-bottom: 8px;
+        }
+
+        .option:hover { background: rgba(255,255,255,0.04); }
+        .option:last-of-type { margin-bottom: 0; }
+
+        .radio-box {
+            width: 14px;
+            height: 14px;
+            border: 1px solid var(--dim);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s;
+        }
+
+        .radio-fill {
+            width: 6px;
+            height: 6px;
+            background: var(--pink);
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .option.selected .radio-box { border-color: var(--pink); }
+        .option.selected .radio-fill { opacity: 1; }
+        .option.selected .option-text { color: var(--pink); }
+
+        .option-text {
+            font-size: clamp(11px, 1.4vw, 14px);
+            color: var(--mid);
+            letter-spacing: 0.08em;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        /* divider */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: var(--dim);
+            margin: 8px 0;
+            opacity: 0.4;
+        }
+
+        /* buttons */
+        .btn-row {
+            display: flex;
+            gap: 13px;
+            justify-content: flex-end;
+            margin-top: 21px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--dim);
+            color: var(--mid);
+            font-family: inherit;
+            font-size: clamp(9px, 1.1vw, 11px);
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            padding: 10px 26px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn:hover { border-color: var(--white); color: var(--white); }
+
+        .btn.primary {
+            border-color: var(--pink);
+            color: var(--pink);
+        }
+
+        .btn.primary:hover {
+            background: var(--pink);
+            color: var(--black);
+        }
+
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn:disabled:hover { background: transparent; border-color: var(--dim); color: var(--dim); }
+
+        /* scanline overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.07) 2px,
+                rgba(0,0,0,0.07) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* responsive */
+        @media (max-width: 768px) {
+            .manifesto-section {
+                padding: 20px;
+            }
+            
+            .paradox-row { 
+                flex-direction: column; 
+                gap: 6px; 
+            }
+            
+            .paradox-arrow { 
+                transform: rotate(90deg); 
+            }
+            
+            .btn-row { 
+                flex-direction: column; 
+            }
+            
+            .btn { 
+                text-align: center; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ BOOT SCREEN ═══════════════════════════════════ -->
+<div id="boot">
+    <div id="boot-lines"></div>
+    <div class="bar-wrap" id="bar-wrap">
+        <div class="bar-fill" id="bar-fill"></div>
+    </div>
+    <div class="bar-label" id="bar-label">LOADING PARADOX_OS v2.2.255</div>
+</div>
+
+<!-- ═══ MAIN ═══════════════════════════════════════════ -->
+<div id="main">
+    <div class="inner">
+
+        <pre class="ascii-title">
+██████╗ ██████╗  ██████╗  ██████╗███████╗███████╗██████╗ 
+██╔══██╗██╔══██╗██╔═══██╗██╔════╝██╔════╝██╔════╝██╔══██╗
+██████╔╝██████╔╝██║   ██║██║     █████╗  █████╗  ██║  ██║
+██╔═══╝ ██╔══██╗██║   ██║██║     ██╔══╝  ██╔══╝  ██║  ██║
+██║     ██║  ██║╚██████╔╝╚██████╗███████╗███████╗██████╔╝
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚══════╝╚══════╝╚═════╝ 
+
+██╗    ██╗██╗████████╗██╗  ██╗     ██████╗██╗  ██╗ █████╗  ██████╗ ███████╗
+██║    ██║██║╚══██╔══╝██║  ██║    ██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔════╝
+██║ █╗ ██║██║   ██║   ███████║    ██║     ███████║███████║██║   ██║███████╗
+██║███╗██║██║   ██║   ██╔══██║    ██║     ██╔══██║██╔══██║██║   ██║╚════██║
+╚███╔███╔╝██║   ██║   ██║  ██║    ╚██████╗██║  ██║██║  ██║╚██████╔╝███████║
+ ╚══╝╚══╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝</pre>
+
+        <!-- ═══ MANIFESTO SECTION ═══ -->
+        <div class="manifesto-section">
+            <div class="opening-quote">
+                "Like all the great profound truths in life are paradoxes. Any 2 points are infinitely different, any moment is perfectly unique"
+                <span class="quote-author">—Naval Ravikant</span>
+            </div>
+
+            <p>
+                There is infinite wisdom inside of paradox. Logic is key to scientific truths, but reality is not bound to these confines. Many of life's most profound truths are hidden in-between the lines, obfuscated through paradox, and concealed from the plaintext realities of everyday life.
+            </p>
+
+            <p>
+                Everything in life is a contrast of complementary opposites - every negative holds within it a necessary positive, & vice versa —
+                <span class="poetic-line">yin & yang, sun & rain, pleasure & pain, losses & gains.</span>
+            </p>
+
+            <div class="inline-quote">
+                "darkness and light are only meaningful in relationship with each other. without one, the other would not exist. they're a matched dynamic system like ying and yang"
+                <span class="quote-author">—Rick Rubin</span>
+            </div>
+
+            <p>
+                You can't have one without the other, which is why much greatness in life comes from suffering.
+            </p>
+
+            <p>
+                If you're happy, that means you were sad at some point.<br>
+                If she's attractive, that means someone else is unattractive.
+            </p>
+
+            <p>
+                These are not opposing conflicts to be resolved, but interdependent balances to be embraced.
+            </p>
+
+            <p>Take for instance, any of the following —</p>
+
+            <ul class="paradox-list">
+                <li>less is more</li>
+                <li>change is the only constant</li>
+                <li>the more you fail, the more likely you are to succeed</li>
+                <li>the more you learn, the more you realize how little you know</li>
+            </ul>
+
+            <p>
+                At face value, each statement is counter-intuitive, and defies the standards of scientific logic and reason, yet real-life experience always resolves each of these contradictions into <span class="emphasis-truth">truth</span> every time.
+            </p>
+
+            <p>
+                When you find two opposites that are both true, start exploring, and you'll discover how two seemingly contradictory statements align—equally correct—with a combined value that outweighs the sum of its parts.
+            </p>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-header">⚠ WARNING ⚠</div>
+            <div class="paradox-row">
+                <span class="paradox-item">CHAOS BIRTHS ORDER</span>
+                <span class="paradox-arrow">⟷</span>
+                <span class="paradox-item">ORDER BIRTHS CHAOS</span>
+            </div>
+        </div>
+
+        <div class="terms-box">
+            <div class="terms-label">// DO YOU WISH TO:</div>
+
+            <div class="option" id="opt-order" onclick="select('order')">
+                <div class="radio-box"><div class="radio-fill"></div></div>
+                <span class="option-text">PRESERVE ORDER</span>
+            </div>
+
+            <div class="option" id="opt-chaos" onclick="select('chaos')">
+                <div class="radio-box"><div class="radio-fill"></div></div>
+                <span class="option-text">PROCEED WITH PARADOXICAL CHAOS</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="btn-row">
+                <button class="btn" onclick="cancel()">CANCEL</button>
+                <button class="btn primary" id="proceed-btn" onclick="proceed()" disabled>PROCEED</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ─── BOOT SEQUENCE DATA ────────────────────────────────
+    const lines = [
+        { text: 'PARADOX_OS  v2.2.255',            cls: 'accent gap' },
+        { text: '─'.repeat(42),                     cls: 'dim' },
+        { text: 'BIOS INIT ........................ OK', cls: 'mid' },
+        { text: 'MEMORY CHECK .................... OK', cls: 'mid' },
+        { text: 'CONTRADICTION ENGINE ............ LOADED', cls: '' },
+        { text: 'REALITY_PARSER .................. COMPROMISED', cls: 'accent' },
+        { text: 'LOGIC_KERNEL .................... BYPASSED', cls: 'accent' },
+        { text: '─'.repeat(42),                     cls: 'dim gap' },
+        { text: 'PARADOXES_LOADED .............. 255', cls: '' },
+        { text: 'CONTRADICTIONS ................ ∞', cls: '' },
+        { text: 'TRUTH_STATUS .................. UNDEFINED', cls: 'yellow' },
+        { text: '─'.repeat(42),                     cls: 'dim gap' },
+    ];
+
+    const container   = document.getElementById('boot-lines');
+    const barWrap     = document.getElementById('bar-wrap');
+    const barFill     = document.getElementById('bar-fill');
+    const barLabel    = document.getElementById('bar-label');
+    const bootEl      = document.getElementById('boot');
+    const mainEl      = document.getElementById('main');
+
+    let lineIdx = 0;
+
+    // ─── RENDER LINES ──────────────────────────────────────
+    function nextLine() {
+        if (lineIdx >= lines.length) {
+            startProgress();
+            return;
+        }
+        const { text, cls } = lines[lineIdx++];
+        const el = document.createElement('div');
+        el.className = 'boot-line visible' + (cls ? ' ' + cls : '');
+        el.textContent = text;
+        container.appendChild(el);
+        setTimeout(nextLine, lineIdx < 4 ? 90 : 55);
+    }
+
+    // ─── PROGRESS BAR ──────────────────────────────────────
+    function startProgress() {
+        barWrap.classList.add('visible');
+        barLabel.classList.add('visible');
+        let pct = 0;
+        const iv = setInterval(() => {
+            // variable speed — slower mid-way, fast at end
+            const step = pct < 70 ? 1.2 : pct < 92 ? 0.6 : 2.5;
+            pct = Math.min(100, pct + step);
+            barFill.style.width = pct + '%';
+            barLabel.textContent = `LOADING PARADOX_OS v2.2.255  [${Math.floor(pct)}%]`;
+            if (pct >= 100) {
+                clearInterval(iv);
+                barLabel.textContent = 'SYSTEM READY — INITIATING INTERFACE';
+                setTimeout(reveal, 600);
+            }
+        }, 40);
+    }
+
+    // ─── REVEAL MAIN ───────────────────────────────────────
+    function reveal() {
+        bootEl.classList.add('fade-out');
+        setTimeout(() => {
+            bootEl.style.display = 'none';
+            mainEl.classList.add('visible');
+        }, 850);
+    }
+
+    // ─── SELECTION LOGIC ───────────────────────────────────
+    let chosen = null;
+
+    function select(val) {
+        chosen = val;
+        document.getElementById('opt-order').classList.toggle('selected', val === 'order');
+        document.getElementById('opt-chaos').classList.toggle('selected', val === 'chaos');
+        document.getElementById('proceed-btn').disabled = false;
+    }
+
+    function proceed() {
+        if (!chosen) return;
+        const btn = document.getElementById('proceed-btn');
+        btn.textContent = 'PROCESSING...';
+        btn.disabled = true;
+        setTimeout(() => {
+            window.location.href = chosen === 'chaos' ? 'index.html' : 'order.html';
+        }, 900);
+    }
+
+    function cancel() {
+        window.history.back();
+    }
+
+    // ─── START ─────────────────────────────────────────────
+    setTimeout(nextLine, 300);
+</script>
+</body>
+</html>

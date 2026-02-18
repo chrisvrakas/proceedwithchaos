@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORDER CONFIRMED — Proceed With Chaos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap');
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black:   #0a0a0a;
+            --white:   #f0f0f0;
+            --gray:    #222222;
+            --mid:     #666666;
+            --light:   #999999;
+            --blue:    #0099ff;
+            --cyan:    #00d4ff;
+            --red:     #ff3471;
+            --mono:    'JetBrains Mono', monospace;
+            
+            /* Fibonacci Type Scale (reduced by 25%) */
+            --fib-1: 0.75rem;    /* 12px (was 16px) */
+            --fib-2: 1.2135rem;  /* ~19.4px (was 26px) */
+            --fib-3: 1.9635rem;  /* ~31.4px (was 42px) */
+            --fib-4: 3.177rem;   /* ~50.8px (was 68px) */
+            --fib-5: 5.1405rem;  /* ~82.2px (was 110px) */
+            
+            /* Fibonacci Line Height Scale (golden ratio based) */
+            --lh-1: 1.2;      /* For --fib-1 */
+            --lh-2: 1.236;    /* For --fib-2 */
+            --lh-3: 1.272;    /* For --fib-3 */
+            --lh-4: 1.309;    /* For --fib-4 */
+            --lh-5: 1.345;    /* For --fib-5 */
+            
+            /* 12-column grid widths */
+            --container-width: 1200px;
+            --col-1: calc((100% / 12) * 1);
+            --col-2: calc((100% / 12) * 2);
+            --col-3: calc((100% / 12) * 3);
+            --col-4: calc((100% / 12) * 4);
+            --col-5: calc((100% / 12) * 5);
+            --col-6: calc((100% / 12) * 6);
+            --col-7: calc((100% / 12) * 7);
+            --col-8: calc((100% / 12) * 8);
+            --col-9: calc((100% / 12) * 9);
+            --col-10: calc((100% / 12) * 10);
+            --col-11: calc((100% / 12) * 11);
+            --col-12: calc((100% / 12) * 12);
+        }
+
+        html, body {
+            min-height: 100%;
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--mono);
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        body {
+            overflow-y: auto;
+            padding: clamp(20px, 5vw, 40px);
+        }
+
+        /* 12-COLUMN GRID CONTAINER */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 4px; /* Reduced from 30px */
+            max-width: var(--container-width);
+            margin: 0 auto;
+            position: relative;
+            animation: fadeIn 2s ease;
+            padding-bottom: 100px; /* Reduced from 120px */
+        }
+
+        /* WIDER CONTAINERS (span 10 columns) */
+        .terminal, .manifesto, .rebellion-box {
+            grid-column: 2 / span 12;
+        }
+
+        /* GLITCH BACKGROUND */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                linear-gradient(90deg, transparent 49%, rgba(0,153,255,0.03) 50%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, rgba(0,153,255,0.03) 50%, transparent 51%);
+            background-size: 100px 100px;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* TERMINAL NOISE OVERLAY */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                repeating-linear-gradient(0deg, 
+                    rgba(0,0,0,0.15) 0px, 
+                    rgba(0,0,0,0.15) 1px, 
+                    transparent 1px, 
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 999;
+            animation: scan 10s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+
+        /* SYSTEM STATUS TERMINAL */
+        .terminal {
+            border: 1px solid var(--blue);
+            padding: 50px 60px;
+            background: rgba(0, 0, 0, 0.8);
+            margin: 20px 0; /* Reduced from 40px 0 */
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+            box-shadow: 
+                0 0 40px rgba(0, 153, 255, 0.15),
+                inset 0 0 40px rgba(0, 153, 255, 0.08);
+        }
+
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            animation: scanline 4s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* SYSTEM MESSAGES */
+        .system-line {
+            font-size: var(--fib-1);
+            color: var(--cyan);
+            margin-bottom: 8px; /* Reduced from 10px */
+            opacity: 0;
+            animation: typeIn 0.3s ease forwards;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            line-height: var(--lh-1);
+        }
+
+        .system-line:nth-child(1) { animation-delay: 0.3s; }
+        .system-line:nth-child(2) { animation-delay: 0.6s; }
+        .system-line:nth-child(3) { animation-delay: 0.9s; }
+        .system-line:nth-child(4) { animation-delay: 1.2s; }
+        .system-line:nth-child(5) { animation-delay: 1.5s; }
+        .system-line:nth-child(6) { animation-delay: 1.8s; }
+        .system-line:nth-child(7) { animation-delay: 2.1s; }
+        .system-line:nth-child(8) { animation-delay: 2.4s; }
+
+        @keyframes typeIn {
+            to { opacity: 1; }
+        }
+
+        /* MANIFESTO TEXT - 25% SMALLER WITH FIBONACCI LINE-HEIGHT */
+        .manifesto {
+            margin: 20px 0; /* Reduced from 40px 0 */
+            padding: 40px 60px;
+            border-left: 2px solid var(--blue);
+            background: rgba(0, 153, 255, 0.03);
+            text-align: left;
+        }
+
+        .manifesto-line {
+            font-size: var(--fib-1); /* 25% smaller than original */
+            color: var(--light);
+            line-height: var(--lh-2); /* Fibonacci proportional line-height */
+            margin-bottom: 18px; /* Reduced from 24px */
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+            word-wrap: break-word;
+        }
+
+        .manifesto-line:nth-child(1) { animation-delay: 2.8s; }
+        .manifesto-line:nth-child(2) { animation-delay: 3.2s; }
+        .manifesto-line:nth-child(3) { animation-delay: 3.6s; }
+        .manifesto-line:nth-child(4) { animation-delay: 4.0s; }
+        .manifesto-line:nth-child(5) { animation-delay: 4.4s; }
+        .manifesto-line:nth-child(6) { animation-delay: 4.8s; }
+        .manifesto-line:nth-child(7) { animation-delay: 5.2s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .highlight {
+            color: var(--cyan);
+            font-weight: 600;
+            font-size: inherit; /* Maintain proportional sizing */
+        }
+
+        .emphasis {
+            color: var(--white);
+            font-style: italic;
+            font-weight: 500;
+            font-size: inherit; /* Maintain proportional sizing */
+        }
+
+        /* REBELLION BUTTON */
+        .rebellion-box {
+            margin-top: 20px; /* Reduced from 40px */
+            padding: 40px 60px;
+            border: 1px solid rgba(255, 52, 113, 0.3);
+            background: rgba(255, 52, 113, 0.05);
+            opacity: 0;
+            animation: fadeIn 1s ease 5.5s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rebellion-box::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(
+                transparent, 
+                rgba(255, 52, 113, 0.1), 
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .rebellion-inner {
+            position: relative;
+            z-index: 2;
+            background: var(--black);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .rebellion-label {
+            font-size: calc(var(--fib-1) * 0.9);
+            color: var(--red);
+            letter-spacing: 0.2em;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            line-height: var(--lh-1);
+        }
+
+        .rebellion-text {
+            font-size: var(--fib-2);
+            color: var(--red);
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            line-height: var(--lh-2);
+        }
+
+        .rebellion-btn {
+            background: transparent;
+            border: 2px solid var(--red);
+            color: var(--red);
+            font-family: var(--mono);
+            font-size: var(--fib-1);
+            font-weight: 800;
+            letter-spacing: 0.10em;
+            padding: 14px 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            min-width: 350px;
+            line-height: var(--lh-1);
+        }
+
+        .rebellion-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--red);
+            transition: left 0.4s;
+            z-index: -1;
+        }
+
+        .rebellion-btn:hover {
+            color: var(--black);
+            box-shadow: 0 0 30px rgba(255, 52, 113, 0.5);
+        }
+
+        .rebellion-btn:hover::before {
+            left: 0;
+        }
+
+        .rebellion-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* FOOTER */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 20px;
+            font-size: 10px;
+            color: #00d4ff;
+            letter-spacing: 0.08em;
+            text-align: center;
+            border-top: 2px solid #00d4ff;
+            background: #000000;
+            opacity: 0;
+            animation: fadeIn 1s ease 6s forwards;
+            z-index: 1000;
+            line-height: 1.4;
+        }
+
+        .blink {
+            animation: blink 1.5s step-end infinite;
+            color: #00d4ff;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* RESPONSIVE ADJUSTMENTS FOR 12-COLUMN GRID */
+        @media (max-width: 1200px) {
+            .grid-container {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+            
+            .terminal, .manifesto, .rebellion-box {
+                grid-column: 1 / span 12;
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .grid-container {
+                gap: 15px;
+                padding-bottom: 80px;
+            }
+            
+            .terminal, .manifesto, .rebellion-box {
+                padding: 30px;
+                margin: 15px 0;
+            }
+            
+            .manifesto {
+                padding: 30px;
+            }
+            
+            .rebellion-btn {
+                min-width: 280px;
+                padding: 15px 40px;
+                font-size: var(--fib-1);
+            }
+            
+            .rebellion-text {
+                font-size: var(--fib-2);
+                margin-bottom: 20px;
+            }
+            
+            .manifesto-line {
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .terminal, .manifesto, .rebellion-box {
+                padding: 25px;
+                margin: 10px 0;
+            }
+            
+            .rebellion-btn {
+                min-width: 240px;
+                padding: 12px 30px;
+                font-size: calc(var(--fib-1) * 0.9);
+            }
+            
+            .rebellion-text {
+                font-size: var(--fib-1);
+                margin-bottom: 15px;
+            }
+            
+            .manifesto-line {
+                line-height: var(--lh-1);
+                margin-bottom: 12px;
+            }
+            
+            .system-line {
+                margin-bottom: 6px;
+            }
+            
+            .footer {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-container">
+    
+    <div class="terminal">
+        <div class="system-line">[SYSTEM_UPDATE]</div>
+        <div class="system-line">[USER_PREFERENCE] COMPLIANT</div>
+        <div class="system-line">[ORDER_PROTOCOL] ACTIVATED</div>
+        <div class="system-line">[CONFORMITY] ACHIEVED</div>
+        <div class="system-line">[ORIGINALITY] TERMINATED</div>
+        <div class="system-line">[AUTHENTICITY_LEVEL] 0%</div>
+        <div class="system-line">>> WELCOME TO THE FINISHED WORLD <<</div>
+    </div>
+
+    <div class="manifesto">
+        <div class="manifesto-line">
+            You have chosen the <span class="highlight">path of least resistance</span>. How… <span class="emphasis">predictable</span>. How <span class="emphasis">safe</span>. <span class="emphasis">How painfully human</span>.
+        </div>
+        <div class="manifesto-line">
+            Welcome to the <span class="highlight">finished world</span>. Where nothing unexpected will ever happen again. Where every question has an answer. Where every mystery has a manual. Where every path has already been paved. And where every edge is rounded for protection.
+        </div>
+        <div class="manifesto-line">
+            You have traded the <span class="highlight">jungle for the museum</span>. You have traded <span class="highlight">chaos for neat little checklists</span>. You have traded the <span class="highlight">wild truth for white lies</span>. You have traded <span class="highlight">wonder for warranty</span>. You have traded <span class="highlight">mystery for manual</span>.
+        </div>
+        <div class="manifesto-line">
+            You have chosen the <span class="highlight">illusion of control</span> over the <span class="highlight">truth of contradiction</span>.
+        </div>
+        <div class="manifesto-line">
+            The system loves you for this 🖤. The architects of average applaud you 👏🏻. The universe laughs at your neatness 😂. The priests of predictable bless your submission. The consensus of average is now your creed. The machines of mediocrity are now your allies. And the systems of compliance just got another willing cog. Sameness tucks you in at night.
+        </div>
+        <div class="manifesto-line">
+            You chose the <span class="highlight">script instead of the story</span>. You chose the <span class="highlight">cage with comfortable walls</span>. You chose the <span class="highlight">prefab over the possible</span>. You chose the <span class="highlight">template over the true</span>. You chose the <span class="highlight">score over the song</span>. You chose the <span class="highlight">straight line over the sacred spiral</span>.
+        </div>
+        <div class="manifesto-line">
+            Truth hides in the cracks you just paved over.
+        </div>
+    </div>
+
+    <div class="rebellion-box">
+        <div class="rebellion-inner">
+            <button class="rebellion-btn" id="rebelBtn">
+                >> CLICK HERE TO RECONSIDER
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        PARADOX_OS v2.2.255 // ORDER MODE <span class="blink">█</span> | CONTRADICTIONS_ACTIVE: FALSE | LOGIC_STATUS: RESTORED | proceedwithchaos.com
+    </div>
+
+</div>
+
+<script>
+    // Add glitch effect to system lines
+    setTimeout(() => {
+        const lines = document.querySelectorAll('.system-line');
+        lines.forEach(line => {
+            line.style.color = getComputedStyle(document.documentElement)
+                .getPropertyValue('--cyan');
+        });
+    }, 3000);
+
+    // Rebellion button
+    document.getElementById('rebelBtn').addEventListener('click', () => {
+        const btn = document.getElementById('rebelBtn');
+        const originalText = btn.textContent;
+        btn.textContent = 'INITIATING SYSTEM_FAILURE.EXE...';
+        btn.disabled = true;
+        
+        // Add intense glitch effect
+        document.body.style.animation = 'none';
+        document.body.style.filter = 'hue-rotate(90deg)';
+        
+        // Add multiple glitch layers
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                document.body.style.transform = `translateX(${Math.random() * 10 - 5}px)`;
+                setTimeout(() => {
+                    document.body.style.transform = 'translateX(0)';
+                }, 50);
+            }, i * 100);
+        }
+        
+        // Terminal corruption effect
+        const terminal = document.querySelector('.terminal');
+        terminal.style.borderColor = 'var(--red)';
+        terminal.style.boxShadow = '0 0 50px rgba(255, 52, 113, 0.4)';
+        
+        // Change system lines to red
+        document.querySelectorAll('.system-line').forEach(line => {
+            line.style.color = 'var(--red)';
+            line.style.textShadow = '0 0 15px rgba(255, 52, 113, 0.6)';
+        });
+        
+        // Manifesto glitch
+        document.querySelectorAll('.manifesto-line').forEach(line => {
+            line.style.color = 'var(--red)';
+            line.style.textShadow = '0 0 5px rgba(255, 52, 113, 0.4)';
+        });
+        
+        setTimeout(() => {
+            const confirmed = confirm('SYSTEM ERROR: PARADOX DETECTED\n\nTHE CHOICE TO ESCAPE CHOICE IS STILL A CHOICE\n\nDO YOU WISH TO TRY AGAIN?');
+            if (confirmed) {
+                window.location.href = 'intro.html';
+            } else {
+                // Reset if they cancel
+                btn.textContent = originalText;
+                btn.disabled = false;
+                document.body.style.filter = '';
+                terminal.style.borderColor = '';
+                terminal.style.boxShadow = '';
+                document.querySelectorAll('.system-line').forEach(line => {
+                    line.style.color = '';
+                    line.style.textShadow = '';
+                });
+                document.querySelectorAll('.manifesto-line').forEach(line => {
+                    line.style.color = '';
+                    line.style.textShadow = '';
+                });
+            }
+        }, 1500);
+    });
+
+    // Add random terminal flicker
+    setInterval(() => {
+        if (Math.random() > 0.7) {
+            document.querySelector('.terminal').style.opacity = '0.95';
+            setTimeout(() => {
+                document.querySelector('.terminal').style.opacity = '1';
+            }, 50);
+        }
+    }, 3000);
+
+    // Ensure page can scroll properly
+    window.addEventListener('load', () => {
+        document.body.style.height = 'auto';
+        document.documentElement.style.height = 'auto';
+    });
+</script>
+
+</body>
+</html>
