@@ -121,9 +121,9 @@ At face value, each statement is counter-intuitive and defies the standards of s
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+**When everyone copyrights, copyleft.**
 
-Feel free to fork, modify, and use for your own projects!
+This project is open source and available under the [MIT License](LICENSE) - meaning you're free to fork, modify, and use it however you want. Just give credit where it's due.
 
 ---
 
