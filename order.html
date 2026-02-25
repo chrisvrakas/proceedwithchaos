@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORDER CONFIRMED — Proceed With Chaos</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap');
 
@@ -225,6 +232,9 @@
             animation: fadeIn 1s ease 5.5s forwards;
             position: relative;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .rebellion-box::before {
@@ -250,6 +260,10 @@
             background: var(--black);
             padding: 30px;
             text-align: center;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .rebellion-label {
@@ -287,6 +301,8 @@
             overflow: hidden;
             min-width: 350px;
             line-height: var(--lh-1);
+            margin: 0 auto;
+            display: block;
         }
 
         .rebellion-btn::before {
@@ -381,6 +397,16 @@
                 min-width: 280px;
                 padding: 15px 40px;
                 font-size: var(--fib-1);
+                margin: 0 auto;
+                display: block;
+            }
+            
+            .rebellion-box {
+                padding: 30px 20px;
+            }
+            
+            .rebellion-inner {
+                padding: 20px 15px;
             }
             
             .rebellion-text {
@@ -567,3 +593,4 @@
 
 </body>
 </html>
+
