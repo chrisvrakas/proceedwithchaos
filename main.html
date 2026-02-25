@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROCEED WITH CHAOS — PARADOX INDEX</title>
-    <meta name="description" content="255 paradoxes of existence, logic, and the human condition. Infinite wisdom inside contradiction.">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌬</text></svg>">
+    <title>PROCEED WITH CHAOS | A COLLECTION OF PARADOXES</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Proceed With Chaos - 255+ Paradoxes That Define Reality">
+    <meta name="description" content="There is infinite wisdom inside of paradox. Explore 255+ philosophical contradictions organized into 8 categories. Logic is key to scientific truths, but reality is not bound to these confines.">
+    <meta name="keywords" content="paradoxes, philosophical paradoxes, psychological paradoxes, life paradoxes, paradox examples, contradictions, truth, logic, reality, chaos, order, philosophy, psychology, wisdom, counter-intuitive truths, duality, yin yang, less is more, self-reference, existential questions, deep thoughts, meaning of life">
+    <meta name="author" content="Chris Vrakas">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://proceedwithchaos.com/">
+    <meta property="og:title" content="Proceed With Chaos - Paradox is the Source Code of Reality">
+    <meta property="og:description" content="A collection of 255+ paradoxes exploring how contradictions reveal deeper psychological truths. Everything in life is a contrast of complementary opposites - every negative holds within it a necessary positive, & vice versa. When you find two opposites that are both true, start exploring...">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://proceedwithchaos.com/">
+    <meta property="twitter:title" content="Proceed With Chaos - 255+ Paradoxes">
+    <meta property="twitter:description" content="Paradox is the source code of reality. Explore 255+ philosophical contradictions.">
+    
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         /* ═══ FONTS ═══ */
@@ -746,6 +769,18 @@
         }
 
         .footer-copy span { color: var(--white); }
+        
+        .footer-copy-link {
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+            font-size: clamp(9px, 2vw, 11px);
+            display: inline-block;
+            font-weight: 700;
+        }
+        .footer-copy-link:hover { color: var(--green); }
+        .footer-copy-link span { color: var(--pink); }
 
         @media (max-width: 768px) {
             .footer-grid { grid-template-columns: 1fr; text-align: center; }
@@ -756,26 +791,16 @@
 
         @media (max-width: 480px) {
             .footer-diagnostics { grid-template-columns: 1fr 1fr; }
+            .footer-copy-link {
+                font-size: 9px;
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+            .footer-copy-link span {
+                display: inline;
+            }
         }
-
-        /* ═══ FOOTER BYLINE ═══ */
-        .footer-bottom {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            padding: 20px 0 0;
-        }
-
-        .footer-copy-link {
-            color: var(--white);
-            text-decoration: none;
-            letter-spacing: 0.1em;
-            transition: color 0.2s;
-            font-size: 11px;
-        }
-        .footer-copy-link:hover { color: var(--green); }
-        .footer-copy-link span { color: var(--pink); }
 
         .footer-byline-rule {
             display: none;
@@ -1040,7 +1065,11 @@
 
         <div class="footer-bottom">
             <div class="footer-copy">
-                <a href="https://proceedwithchaos.com" class="footer-copy-link"> THE SOURCE CODE OF REALITY <span>//</span> PROCEEDWITHCHAOS.COM</a>
+                <a href="https://proceedwithchaos.com" class="footer-copy-link">
+                    <span>THE SOURCE CODE OF REALITY</span>
+                    <span> // </span>
+                    <span>PROCEEDWITHCHAOS.COM</span>
+                </a>
             </div>
             <div class="footer-byline">
                 when everyone <s>copyrights</s>, copyleft <span class="footer-sep">//</span> designed by <a href="http://chrisvrakas.com" target="_blank" rel="noopener">Chris Vrakas</a> 
@@ -1667,7 +1696,8 @@ function initEventListeners() {
 function updateCounts() {
     const total = PARADOXES.length;
     document.getElementById('totalParadoxCount').textContent = total;
-    document.getElementById('footerCount').textContent = total;
+    // Force footer to show 255 (total collection size)
+    document.getElementById('footerCount').textContent = '255';
 }
 
 function escapeHtml(text) {
