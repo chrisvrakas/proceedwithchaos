@@ -126,7 +126,7 @@
             flex-direction: column;
             align-items: center;
             gap: 24px;
-            padding-bottom: 60px;
+            padding: 40px 0 60px;
         }
 
         /* ASCII title */
@@ -396,6 +396,10 @@
 
         /* responsive */
         @media (max-width: 768px) {
+            .inner {
+                padding-top: 48px;
+            }
+
             .manifesto-section {
                 padding: 20px;
             }
@@ -415,6 +419,16 @@
             
             .btn { 
                 text-align: center; 
+            }
+        }
+
+        @media (max-width: 480px) {
+            .inner {
+                padding-top: 56px;
+            }
+
+            .logo-container {
+                padding: 0 16px;
             }
         }
     </style>
