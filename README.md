@@ -138,10 +138,11 @@ This project is open source and available under the [MIT License](LICENSE) - mea
 
 ## 📬 Contact
 
-**Created by Chris Vrakas**
+**Created by [Chris Vrakas](https://chrisvrakas.com)**
 
+- Website: [chrisvrakas.com](https://chrisvrakas.com)
 - GitHub: [@chrisvrakas](https://github.com/chrisvrakas)
-- Website: [proceedwithchaos.com](https://proceedwithchaos.com)
+- PGP: [freedom@chrisvrakas.com](mailto:freedom@chrisvrakas.com)
 
 ---
 
@@ -156,8 +157,7 @@ This project is open source and available under the [MIT License](LICENSE) - mea
 
 <div align="center">
 
-**"The opposite of a profound truth may well be another profound truth."**  
-— Niels Bohr
+**"Learn More. Know Less."**
 
 **[Proceed With Chaos →](https://proceedwithchaos.com)**
 
