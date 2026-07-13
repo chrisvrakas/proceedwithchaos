@@ -1,5 +1,7 @@
 # PROCEED WITH CHAOS
 
+![proceed-with-chaos](assets/images/ProceedWithChaos_OneLineLogo.png)
+
 > **Paradox is the source code of reality.**
 
 A collection of 255+ paradoxes exploring philosophical contradictions and psychological truth. Terminal-aesthetic interface built with vanilla JavaScript.
