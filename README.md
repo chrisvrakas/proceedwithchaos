@@ -1,5 +1,3 @@
-# PROCEED WITH CHAOS
-
 ![proceed-with-chaos](assets/images/ProceedWithChaos_OneLineLogo.png)
 
 > **Paradox is the source code of reality.**
